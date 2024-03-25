@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile Page</title>
+</head>
+<body>
+    <h1>Profile</h1>
+    <div>
+        <label>Name:</label>
+        <span id="name"></span>
+    </div>
+    <div>
+        <label>Email:</label>
+        <span id="email"></span>
+    </div>
+    <div>
+        <label>Username:</label>
+        <span id="username"></span>
+    </div>
+    <div>
+        <label>Room:</label>
+        <span id="room"></span>
+    </div>
+
+    <script>
+        // Replace the following lines with fetched data and display user data
+        var user = {
+            name: "John Doe",
+            email: "johndoe@example.com",
+            username: "johndoe123",
+            room: "Room 1"
+        };
+
+        document.getElementById("name").textContent = user.name;
+        document.getElementById("email").textContent = user.email;
+        document.getElementById("username").textContent = user.username;
+        document.getElementById("room").textContent = user.room;
+    </script>
+</body>
+</html>

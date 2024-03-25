@@ -5,11 +5,33 @@
 </head>
 <body>
     <h1>Login</h1>
-    <form>
+    <form id="loginForm" action="profile.html">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
         <br>
         <input type="submit" value="Log In">
     </form>
+    <a href="Signup.html"><button>Sign Up</button></a>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Perform username validation here
+            var username = document.getElementById("username").value;
+            if (usernameIsValid(username)) {
+                // Redirect to profile page
+                window.location.href = "profile.html";
+            } else {
+                alert("Invalid username. Please try again.");
+            }
+        });
+
+        function usernameIsValid(username) {
+            // Add your username validation logic here
+            // Return true if valid, false otherwise
+            return username.length >= 3;
+        }
+    </script>
 </body>
 </html>
