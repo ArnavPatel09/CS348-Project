@@ -1,35 +1,61 @@
-function usernameCheck() {
-    var xhr = new XMLHttpRequest();
-    console.log(document.getElementById("username").value);
-    var username = document.getElementById("username").value;
-    saveUsername(username);
-    var url = '' + document.getElementById("username").value;
-    xhr.open('GET', url, true);
+function saveUsername(username) {
+    globalUsername = username;
+    localStorage.setItem("username", username);
+}
+function saveUserID(uid) {
+    globalUserID = uid;
+    localStorage.setItem("globalUserID", uid);
+}
+function saveRoomID(roomID) {
+    globalRoomID = roomID;
+    localStorage.setItem("globalRoomID", roomID);
+}
 
-    xhr.onreadystatechange = function() {
-    if (xhr.readyState === XMLHttpRequest.DONE) {
-        if (xhr.status === 200) {
-        // Handle successful response
-        var arr = xhr.responseText.split(",");
-        for (var i = 0; i < arr.length; i++) {
-            arr[i] = arr[i].replace(/[^\w\s]/gi, '')
-            arr[i] = arr[i].replace(/\s/g, '')
-        }
-        if (arr[0] == String(userID)) {
-            if (arr[4] === 'null') {
-                window.location.href = "add3.html";
-            }
-            else if (arr[4] != 'null'){
-                alert("User ID already has a room! Please select another ID")
-            }
-        } else {
-            alert("User ID does not exist");
-        }
-        } else {
-        // Handle error
-        console.error('Request failed with status:', xhr.status);
-        }
-    }
-    };
-    xhr.send();
+function saveEmail(email) {
+    globalEmail = email;
+    localStorage.setItem("email", email);
+}
+
+function saveName(first, last) {
+    globalName = first + " " + last;
+    localStorage.setItem("name", globalName);
+}
+
+function usernameCheck(event) {
+    event.preventDefault();
+    // console.log(document.getElementById("username").value);
+    var username = document.getElementById("username").value;
+    // console.log(localStorage.getItem("username"));
+    var url = 'https://us-central1-cs348-project-418317.cloudfunctions.net/getUser?username=' + username;
+
+    fetch(url, {method: "GET", mode: 'cors'})
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    if (data.length == 0) {
+                        alert("Student does not exist!");
+                        return;
+                    }
+                    else {
+                        array = data[0];
+                        //format: [uid, first, last, username, email, room]
+                        saveUserID(array[0]);
+                        saveName(array[1], array[2]);
+                        saveEmail(array[4]);
+                        saveUsername(array[3]);
+                        saveRoomID(array[5]); // stores as 'null' if not present
+                        //console.log(typeof array[5]); //object type
+                        // console.log(localStorage.getItem("globalRoomID") === 'null'); //true //string
+                        window.location.href = "Profile.html";
+                        return;
+                    }    
+                });
+
+                
+
+}
+
+function roomPage() {
+    // Add your logic here to handle room picking
+    window.location.href = "RoomPicker.html";
 }

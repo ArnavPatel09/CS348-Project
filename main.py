@@ -1,5 +1,9 @@
-import mysql.connector;
-import json;
+import mysql.connector
+from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
+
+app = Flask(__name__)
+cors = CORS(app)
 
 def deleteUser(request):
     userID = request.args.get('userID')
@@ -162,14 +166,12 @@ def addRoom(request):
     
 def getUser(request):
     username = request.args.get('username')
-    headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-    }
-    if request.method == 'OPTIONS':
-        return ('', 204, headers)
-
+    # headers = {
+    #     'Access-Control-Allow-Origin': '*',
+    #     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    #     'Access-Control-Allow-Headers': 'Content-Type',
+    # }
+    
     # Connect to the MySQL database.
     conn = mysql.connector.connect(host='35.238.112.0',
                                     user='code',
@@ -188,7 +190,11 @@ def getUser(request):
     conn.close()
 
     # Return the results of the stored procedure.
-    return (results, 200, headers)
+    response = jsonify(results)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+    return response
 
 def test():
     # # Testing for getUser
