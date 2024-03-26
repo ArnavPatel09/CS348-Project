@@ -75,14 +75,6 @@ def addUser(request):
     return (username, 200, headers)
 
 def getOpenRooms(request):
-    headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-    }
-    if request.method == 'OPTIONS':
-        return ('', 204, headers)
-
     # Connect to the MySQL database.
     conn = mysql.connector.connect(host='35.238.112.0',
                                     user='code',
@@ -101,8 +93,11 @@ def getOpenRooms(request):
     cursor.close()
     conn.close()
 
-    # Return the results of the stored procedure.
-    return (results, 200, headers)
+    response = jsonify(results)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+    return response
 
 def getAllRooms(request):
     headers = {

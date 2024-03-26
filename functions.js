@@ -33,7 +33,8 @@ function usernameCheck(event) {
                 .then((data) => {
                     console.log(data);
                     if (data.length == 0) {
-                        alert("Student does not exist!");
+                        //alert("Student does not exist!");
+                        getOpenRooms();
                         return;
                     }
                     else {
@@ -50,12 +51,37 @@ function usernameCheck(event) {
                         return;
                     }    
                 });
-
-                
-
 }
 
 function roomPage() {
     // Add your logic here to handle room picking
     window.location.href = "RoomPicker.html";
+}
+
+function getOpenRooms() {
+    var url = 'https://us-central1-cs348-project-418317.cloudfunctions.net/getOpenRooms';
+
+    fetch(url, {method: "GET", mode: 'cors'})
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    if (data.length == 0) {
+                        alert("No open rooms!");
+                        return;
+                    }
+                    else {
+                        console.log(data);
+                        console.log(data[0]);
+                        //format: [uid, first, last, username, email, room]
+                        // saveUserID(array[0]);
+                        // saveName(array[1], array[2]);
+                        // saveEmail(array[4]);
+                        // saveUsername(array[3]);
+                        // saveRoomID(array[5]); // stores as 'null' if not present
+                        // //console.log(typeof array[5]); //object type
+                        // // console.log(localStorage.getItem("globalRoomID") === 'null'); //true //string
+                        // window.location.href = "Profile.html";
+                        return;
+                    }    
+                });
 }
