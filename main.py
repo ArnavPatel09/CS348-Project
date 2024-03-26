@@ -134,6 +134,34 @@ def getAllRooms(request):
     return (results, 200, headers)
 
 
+def addRoom(request):
+    roomID = request.args.get('roomID')
+    userID = request.args.get('userID')
+    headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+    }
+    if request.method == 'OPTIONS':
+        return ('', 204, headers)
+
+    # Connect to the MySQL database.
+    conn = mysql.connector.connect(host='35.238.112.0',
+                                    user='code',
+                                    password='pate1483',
+                                    #user='root',
+                                    database='users')
+    #add room to the user, and update the room table
+    cursor = conn.cursor()
+    
+    cursor.callproc('AssignRoomToUser', (userID, roomID,))
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    # Return the results of the stored procedure.
+    return (userID, 200, headers)
 
 # # TESTING FOR deleteUser
 # request = type('Request', (object,), {'args': {'userID': 102}, 'method': 'POST'})()
@@ -155,4 +183,6 @@ def getAllRooms(request):
 # request = type('Request', (object,), {'args': {}, 'method': 'GET'})()
 # print(getOpenRooms(request))
 
-
+# Testing for addRoom
+request = type('Request', (object,), {'args': {'userID': 97, 'roomID': 100}, 'method': 'POST'})()
+print(addRoom(request))
