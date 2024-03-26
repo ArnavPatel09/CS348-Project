@@ -70,7 +70,6 @@ def addUser(request):
     # Return the results of the stored procedure.
     return (username, 200, headers)
 
-
 def getOpenRooms(request):
     #bID = request.args.get('bID')
     headers = {
@@ -133,7 +132,6 @@ def getAllRooms(request):
     # Return the results of the stored procedure.
     return (results, 200, headers)
 
-
 def addRoom(request):
     roomID = request.args.get('roomID')
     userID = request.args.get('userID')
@@ -163,6 +161,37 @@ def addRoom(request):
     # Return the results of the stored procedure.
     return (userID, 200, headers)
 
+def getProfile(request):
+    userID = request.args.get('userID')
+    headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+    }
+    if request.method == 'OPTIONS':
+        return ('', 204, headers)
+
+    # Connect to the MySQL database.
+    conn = mysql.connector.connect(host='35.238.112.0',
+                                    user='code',
+                                    password='pate1483',
+                                    #user='root',
+                                    database='users'
+                                )
+    # Create a cursor.
+    cursor = conn.cursor(prepared=True)
+    # Execute the prepared statement.
+    cursor.execute(" SELECT * FROM users_table WHERE user_id = %s;", (userID,))
+
+    # Get the results of the stored procedure.
+    results = cursor.fetchall()
+    # Close the cursor and connection.
+    cursor.close()
+    conn.close()
+
+    # Return the results of the stored procedure.
+    return (results, 200, headers)
+
 # # TESTING FOR deleteUser
 # request = type('Request', (object,), {'args': {'userID': 102}, 'method': 'POST'})()
 # print("starting")
@@ -183,6 +212,10 @@ def addRoom(request):
 # request = type('Request', (object,), {'args': {}, 'method': 'GET'})()
 # print(getOpenRooms(request))
 
-# Testing for addRoom
-request = type('Request', (object,), {'args': {'userID': 97, 'roomID': 100}, 'method': 'POST'})()
-print(addRoom(request))
+# # Testing for addRoom
+# request = type('Request', (object,), {'args': {'userID': 97, 'roomID': 100}, 'method': 'POST'})()
+# print(addRoom(request))
+
+# # Testing for getProfile
+# request = type('Request', (object,), {'args': {'userID': 97}, 'method': 'GET'})()
+# print(getProfile(request))
