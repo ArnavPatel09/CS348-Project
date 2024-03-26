@@ -190,35 +190,38 @@ def getUser(request):
     # Return the results of the stored procedure.
     return (results, 200, headers)
 
+def test():
+    # # Testing for getUser
+    # request = type('Request', (object,), {'args': {'username':'jameshall'}, 'method': 'GET'})()
+    # print(getUser(request))
 
-# # Testing for getUser
-# request = type('Request', (object,), {'args': {'username':'jameshall'}, 'method': 'GET'})()
-# print(getUser(request))
-
-# # TESTING FOR deleteUser
-# request = type('Request', (object,), {'args': {'userID': 102}, 'method': 'POST'})()
-# print("starting")
-# deleteUser(request)
-# print("done")
+    # # TESTING FOR deleteUser
+    # request = type('Request', (object,), {'args': {'userID': 102}, 'method': 'POST'})()
+    # print("starting")
+    # deleteUser(request)
+    # print("done")
 
 
-# # Testing for addUser
-# request = type('Request', (object,), {'args': {'firstname':'John', 'lastname':'Doe', 'email':'john.doe@example.com', 'username':'johndoe'}, 'method': 'POST'})()
-# addUser(request)
-# print("done")
+    # # Testing for addUser
+    # request = type('Request', (object,), {'args': {'firstname':'John', 'lastname':'Doe', 'email':'john.doe@example.com', 'username':'johndoe'}, 'method': 'POST'})()
+    # addUser(request)
+    # print("done")
 
-# Testing for getOpenRooms
-# request = type('Request', (object,), {'args': {}, 'method': 'GET'})()
-# print(getOpenRooms(request))
+    # Testing for getOpenRooms
+    # request = type('Request', (object,), {'args': {}, 'method': 'GET'})()
+    # print(getOpenRooms(request))
 
-# # Testing for getAllRooms
-# request = type('Request', (object,), {'args': {}, 'method': 'GET'})()
-# print(getOpenRooms(request))
+    # # Testing for getAllRooms
+    # request = type('Request', (object,), {'args': {}, 'method': 'GET'})()
+    # print(getOpenRooms(request))
 
-# # Testing for addRoom
-# request = type('Request', (object,), {'args': {'userID': 97, 'roomID': 100}, 'method': 'POST'})()
-# print(addRoom(request))
+    # # Testing for addRoom
+    # request = type('Request', (object,), {'args': {'userID': 97, 'roomID': 100}, 'method': 'POST'})()
+    # print(addRoom(request))
 
-# # Testing for getProfile
-# request = type('Request', (object,), {'args': {'userID': 97}, 'method': 'GET'})()
-# print(getProfile(request))
+    # # Testing for getProfile
+    # request = type('Request', (object,), {'args': {'userID': 97}, 'method': 'GET'})()
+    # print(getProfile(request))
+    return
+
+test()
