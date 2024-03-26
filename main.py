@@ -71,7 +71,6 @@ def addUser(request):
     return (username, 200, headers)
 
 def getOpenRooms(request):
-    #bID = request.args.get('bID')
     headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -160,9 +159,9 @@ def addRoom(request):
 
     # Return the results of the stored procedure.
     return (userID, 200, headers)
-
-def getProfile(request):
-    userID = request.args.get('userID')
+    
+def getUser(request):
+    username = request.args.get('username')
     headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -175,13 +174,12 @@ def getProfile(request):
     conn = mysql.connector.connect(host='35.238.112.0',
                                     user='code',
                                     password='pate1483',
-                                    #user='root',
                                     database='users'
                                 )
     # Create a cursor.
     cursor = conn.cursor(prepared=True)
     # Execute the prepared statement.
-    cursor.execute(" SELECT * FROM users_table WHERE user_id = %s;", (userID,))
+    cursor.execute(" SELECT * FROM users_table WHERE username = %s;", (username,))
 
     # Get the results of the stored procedure.
     results = cursor.fetchall()
@@ -191,6 +189,11 @@ def getProfile(request):
 
     # Return the results of the stored procedure.
     return (results, 200, headers)
+
+
+# # Testing for getUser
+# request = type('Request', (object,), {'args': {'username':'jameshall'}, 'method': 'GET'})()
+# print(getUser(request))
 
 # # TESTING FOR deleteUser
 # request = type('Request', (object,), {'args': {'userID': 102}, 'method': 'POST'})()

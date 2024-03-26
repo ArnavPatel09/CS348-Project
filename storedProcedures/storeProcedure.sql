@@ -78,5 +78,5 @@ END%%
 DELIMITER ;
 
 -- CALL AssignRoomToUser(101, 100)
--- CALL DeleteUser(101);
+-- CALL DeleteUser(83);
 -- CALL InsertUser('Isabella', 'Clark', 'isabellaclark', 'isabellaclark@example.com')
