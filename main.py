@@ -7,9 +7,6 @@ cors = CORS(app)
 
 def deleteUser(request):
     userID = request.args.get('userID')
-    #print(type(userID))
-    #userID = request
-    #print("userID: ", userID)
     headers = {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -42,36 +39,43 @@ def deleteUser(request):
     return (800, 200, headers)
 
 def addUser(request):
-    #userID = request.args.get('userID')
-    firstname = request.args.get('firstname')
-    lastname = request.args.get('lastname')
+    first_name = request.args.get('first_name')
+    last_name = request.args.get('last_name')
     email = request.args.get('email')
     username = request.args.get('username')
 
     # Connect to the MySQL database.
-    conn = mysql.connector.connect(host='35.238.112.0',
-                                    user='code',
-                                    password='pate1483',
-                                    #user='root',
-                                    database='users')
+    conn = mysql.connector.connect(host='35.238.112.0', user='code', password='pate1483', database='users')
     cursor = conn.cursor()
-    
-    cursor.callproc('InsertUser', (firstname, lastname, username, email,))
-    
-    #iterate through cursor and fetchall
-    
-    conn.commit()
-    cursor.close()
-    conn.close()
-    
-    result = {"message": "User added successfully!"}
-    response = jsonify(result)
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
 
-    # Return the results of the stored procedure.
-    return response
+    # Check if the email or username already exists
+    check_query = "SELECT COUNT(*) FROM users_table WHERE email = %s OR username = %s"
+    cursor.execute(check_query, (email, username))
+    count = cursor.fetchone()[0]
+
+    if count > 0:
+        # Email or username already exists, send a failure response
+        result = {"message": "Email or username already registered."}
+        response = jsonify(result)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        cursor.close()
+        conn.close()
+        return response
+    else:
+        # Email and username are unique, proceed with user registration
+        cursor.callproc('InsertUser', (first_name, last_name, username, email,))
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        result = {"message": "User added successfully!"}
+        response = jsonify(result)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        return response
 
 def getOpenRooms(request):
     # Connect to the MySQL database.
