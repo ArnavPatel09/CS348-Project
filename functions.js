@@ -110,3 +110,25 @@ function getOpenRooms() {
                     }    
                 });
 }
+
+function signOut() {
+    localStorage.clear();
+    window.location.href = "login.html";
+}
+
+function deleteAccount() {
+    var url = 'https://us-central1-cs348-project-418317.cloudfunctions.net/deleteUser?uid=' + globalUserID;
+
+    fetch(url, {method: "DELETE", mode: 'cors'})
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    if (data.message == "User deleted.") {
+                        alert("User deleted!");
+                    } else {
+                        alert("User not found.");
+                    }
+                    localStorage.clear();
+                    window.location.href = "login.html";
+                });
+}
