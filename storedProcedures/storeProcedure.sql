@@ -38,8 +38,10 @@ CREATE PROCEDURE InsertUser(
     IN p_email VARCHAR(255)
 )
 BEGIN
-    INSERT INTO users_table (first_name, last_name, username, email)
-    VALUES (p_first_name, p_last_name, p_username, p_email);
+    IF p_email NOT IN (SELECT email FROM users_table) AND p_username NOT IN (select username FROM users_table) THEN
+        INSERT INTO users_table (first_name, last_name, username, email)
+        VALUES (p_first_name, p_last_name, p_username, p_email);
+    END IF;
 END $$
 DELIMITER ;
 
@@ -79,4 +81,4 @@ DELIMITER ;
 
 -- CALL AssignRoomToUser(101, 100)
 -- CALL DeleteUser(83);
--- CALL InsertUser('Isabella', 'Clark', 'isabellaclark', 'isabellaclark@example.com')
+-- CALL InsertUser('James', 'Hall', 'jameshall', 'jameshall@example.com')

@@ -47,15 +47,6 @@ def addUser(request):
     lastname = request.args.get('lastname')
     email = request.args.get('email')
     username = request.args.get('username')
-    
-    headers = {
-        'Access-Control-Allow-Origin': '*', 
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-    }
-    
-    if request.method == 'OPTIONS':
-        return ('', 204, headers)
 
     # Connect to the MySQL database.
     conn = mysql.connector.connect(host='35.238.112.0',
@@ -67,12 +58,20 @@ def addUser(request):
     
     cursor.callproc('InsertUser', (firstname, lastname, username, email,))
     
+    #iterate through cursor and fetchall
+    
     conn.commit()
     cursor.close()
     conn.close()
+    
+    result = {"message": "User added successfully!"}
+    response = jsonify(result)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
 
     # Return the results of the stored procedure.
-    return (username, 200, headers)
+    return response
 
 def getOpenRooms(request):
     # Connect to the MySQL database.
@@ -198,10 +197,10 @@ def test():
     # print("done")
 
 
-    # # Testing for addUser
-    # request = type('Request', (object,), {'args': {'firstname':'John', 'lastname':'Doe', 'email':'john.doe@example.com', 'username':'johndoe'}, 'method': 'POST'})()
-    # addUser(request)
-    # print("done")
+    # Testing for addUser
+    request = type('Request', (object,), {'args': {'firstname':'test', 'lastname':'function', 'email':'a@example.com', 'username':'a'}, 'method': 'POST'})()
+    addUser(request)
+    print("done")
 
     # Testing for getOpenRooms
     # request = type('Request', (object,), {'args': {}, 'method': 'GET'})()

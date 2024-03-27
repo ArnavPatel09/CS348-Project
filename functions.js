@@ -53,6 +53,38 @@ function usernameCheck(event) {
                 });
 }
 
+function signUp(event) {
+    event.preventDefault();
+    console.log("signing up");
+    var first_name = document.getElementById("first_name").value;
+    var last_name = document.getElementById("last_name").value;
+    var username = document.getElementById("username").value;
+    var email = document.getElementById("email").value;
+
+    var url = 'https://us-central1-cs348-project-418317.cloudfunctions.net/addUser?firstname=' + first_name + '&lastname=' + last_name + '&username=' + username + '&email=' + email;
+    console.log("fetching..");
+    fetch(url, {method: "POST", mode: 'cors'})
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log("data");
+                    console.log(data);
+                    console.log(data.message);
+                    if (data.message == "Email or username already registered.") {
+                        alert("Email or username already registered.");
+                        //return;
+                    } else {
+                        alert("User added!");
+                        saveName(first_name, last_name);
+                        saveEmail(email);
+                        saveUsername(username);
+                        saveRoomID('Null');
+                        window.location.href = "Profile.html";
+                    }
+                    //window.location.href = "Profile.html";
+                    //return;
+                });
+}
+
 function roomPage() {
     // Add your logic here to handle room picking
     window.location.href = "RoomPicker.html";
@@ -71,16 +103,9 @@ function getOpenRooms() {
                     }
                     else {
                         console.log(data);
-                        console.log(data[0]);
-                        //format: [uid, first, last, username, email, room]
-                        // saveUserID(array[0]);
-                        // saveName(array[1], array[2]);
-                        // saveEmail(array[4]);
-                        // saveUsername(array[3]);
-                        // saveRoomID(array[5]); // stores as 'null' if not present
-                        // //console.log(typeof array[5]); //object type
-                        // // console.log(localStorage.getItem("globalRoomID") === 'null'); //true //string
-                        // window.location.href = "Profile.html";
+                        for (let i = 0; i < data.length; i++) {
+                           console.log(data[i][0] + ":" + data[i][1]); // roomID:roomName
+                        }
                         return;
                     }    
                 });
