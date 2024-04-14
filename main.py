@@ -6,39 +6,32 @@ app = Flask(__name__)
 cors = CORS(app)
 
 def deleteUser(request):
-    userID = request.args.get('userID')
-    headers = {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type',
-        }
-    if request.method == 'OPTIONS':
-            return ('', 204, headers)
-
-    # Connect to the MySQL database.
-    #print("connecting")
+    userID = request.args.get('uid')
     conn = mysql.connector.connect(host='35.238.112.0',
                                     user='code',
                                     password='pate1483',
                                     #user='root',
                                     database='users')
-    #print("connected")
-    # Create a cursor.
     cursor = conn.cursor()
-    # Execute the stored procedure.
-    #print("calling stored procedure")
-    cursor.callproc('DeleteUser', (userID,))
-    #print("stored procedure called")
+    #check if user exists
+    check_query = "SELECT COUNT(*) FROM users_table WHERE userID = %s"
+    cursor.execute(check_query, (userID,))
+    count = cursor.fetchone()[0]
+    if count > 0:
+        # User exists, proceed with deletion
+        cursor.callproc('DeleteUser', (userID,))
+        conn.commit()
+        cursor.close()
+        conn.close()
+    result = {"message": "User deleted successfully!"}
+    response = jsonify(result)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+    return response
+    
 
-    conn.commit()
-    cursor.close()
-    conn.close()
-
-    # Return the results of the stored procedure.
-    #print("returning...")
-    return (800, 200, headers)
-
-def addUser(request):
+def addUser(request): 
     first_name = request.args.get('first_name')
     last_name = request.args.get('last_name')
     email = request.args.get('email')
@@ -135,14 +128,6 @@ def getAllRooms(request):
 def addRoom(request):
     roomID = request.args.get('roomID')
     userID = request.args.get('userID')
-    headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-    }
-    if request.method == 'OPTIONS':
-        return ('', 204, headers)
-
     # Connect to the MySQL database.
     conn = mysql.connector.connect(host='35.238.112.0',
                                     user='code',
@@ -158,8 +143,12 @@ def addRoom(request):
     cursor.close()
     conn.close()
 
-    # Return the results of the stored procedure.
-    return (userID, 200, headers)
+    result = {"message": "Room added successfully!"}
+    response = jsonify(result)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+    return response
     
 def getUser(request):
     username = request.args.get('username')

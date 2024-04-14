@@ -3,33 +3,36 @@
 <head>
     <title>Profile Page</title>
     <script src="functions.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
-<body>
-    <h1>Profile</h1>
-    <div>
-        <label>Name:</label>
-        <span id="name"></span>
-    </div>
-    <div>
-        <label>Email:</label>
-        <span id="email"></span>
-    </div>
-    <div>
-        <label>Username:</label>
-        <span id="username"></span>
-    </div>
-    <div>
-        <label>Room:</label>
-        <span id="room"></span>
-    </div>
-    <div>
-        <button onclick="roomPage()">Pick Room</button>
-    </div>
-    <div>
-        <button onclick="deleteAccount()">Delete Profile</button>
-    </div>
-    <div>
-        <button onclick="signOut()">Sign Out</button>
+<body onload="getUserID()">
+    <div class="top-left-header">
+        <h1>Profile</h1>
+      </div>
+      <div class="header">
+        <button class="profile-button" onclick="roomPage()">Room Picker</button>
+        <button class="sign-out-button" onclick="signOut()">Sign Out</button>
+        <button class="delete-button" onclick="deleteAccount()">Delete Profile</button>
+      </div>
+    <div class="center">
+        <div class="center-profile">
+            <div>
+                <label>Name:</label>
+                <span id="name"></span>
+            </div>
+            <div>
+                <label>Email:</label>
+                <span id="email"></span>
+            </div>
+            <div>
+                <label>Username:</label>
+                <span id="username"></span>
+            </div>
+            <div>
+                <label>Room:</label>
+                <span id="room"></span>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -37,10 +40,10 @@
         document.getElementById("name").textContent = localStorage.getItem("name");
         document.getElementById("email").textContent = localStorage.getItem("email");
         document.getElementById("username").textContent = localStorage.getItem("username");
-        if (localStorage.getItem("room") == null) {
+        if (localStorage.getItem("globalRoomID") == null) {
             document.getElementById("room").textContent = "Not assigned";
         } else {
-            document.getElementById("room").textContent = localStorage.getItem("room");
+            document.getElementById("room").textContent = localStorage.getItem("globalRoomID");
         }
     </script>
 </body>

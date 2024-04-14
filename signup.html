@@ -4,25 +4,30 @@
 <head>
     <title>Sign Up</title>
     <script src="functions.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
-    <h1>Sign Up</h1>
-    <form id="signupForm" onsubmit="return signUp(event)">
-        <label for="first name">First Name:</label>
-        <input type="text" id="first_name" name="first name" required><br><br>
-
-        <label for="last name">Last Name:</label>
-        <input type="text" id="last_name" name="last name" required><br><br>
-        
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
-
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br><br>
-        
-        <input type="submit" value="submit">
-    </form>
-    <a href="Login.html"><button>Login</button></a>
+    <div class = "top-left-header">
+        <h1>Sign Up</h1>
+    </div>
+    <div class="center">
+        <form id="signupForm" onsubmit="return signUp(event)">
+            <label for="first name">First Name:</label>
+            <input type="text" id="first_name" name="first name" required><br><br>
+    
+            <label for="last name">Last Name:</label>
+            <input type="text" id="last_name" name="last name" required><br><br>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br><br>
+    
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br><br>
+            
+            <button class="login-button" onclick="loginPage()">Back</button>
+            <input type="submit" value="Register">
+        </form>
+    </div>
 </body>
 
 
