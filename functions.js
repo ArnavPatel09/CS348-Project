@@ -102,28 +102,16 @@ function addRoom(event) {
     fetch(url, {method: "POST", mode: 'cors'})
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log("data");
-                    console.log(data);
-                    if (data.message == "Room added successfully!") {
+                    if (data.error !== undefined) {
+                        alert(data.error);
+                    }
+                    else if (data.message == "Room added successfully!") {
                         saveRoomID(roomID);
                         localStorage.removeItem("newRoomID");
+                        alert(data.message);
                     }
-                    alert(data.message);
                     location.reload();
                     return;
-                    // if (data.message == "Email or username already registered.") {
-                    //     alert("Email or username already registered.");
-                    //     //return;
-                    // } else {
-                    //     alert("User added!");
-                    //     saveName(first_name, last_name);
-                    //     saveEmail(email);
-                    //     saveUsername(username);
-                    //     saveRoomID('Null');
-                    //     window.location.href = "Profile.html";
-                    // }
-                    //window.location.href = "Profile.html";
-                    //return;
                 });
 }
 
@@ -198,7 +186,7 @@ function getOpenRooms() {
 
 function signOut() {
     localStorage.clear();
-    window.location.href = "login.html";
+    window.location.href = "Login.html";
 }
 
 function deleteAccount() {
@@ -215,7 +203,7 @@ function deleteAccount() {
                         alert("User not found");
                     }
                     localStorage.clear();
-                    window.location.href = "login.html";
+                    window.location.href = "Login.html";
                 });
 }
 function signUpPage() {
@@ -223,7 +211,7 @@ function signUpPage() {
 }
 
 function loginPage() {
-    window.location.href = "login.html";
+    window.location.href = "Login.html";
 }
 
 

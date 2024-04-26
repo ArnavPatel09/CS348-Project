@@ -40,7 +40,7 @@
         document.getElementById("name").textContent = localStorage.getItem("name");
         document.getElementById("email").textContent = localStorage.getItem("email");
         document.getElementById("username").textContent = localStorage.getItem("username");
-        if (localStorage.getItem("globalRoomID") == null) {
+        if (localStorage.getItem("globalRoomID") == null || localStorage.getItem("globalRoomID") == "null" || localStorage.getItem("globalRoomID") == "Null"){
             document.getElementById("room").textContent = "Not assigned";
         } else {
             document.getElementById("room").textContent = localStorage.getItem("globalRoomID");

@@ -52,30 +52,42 @@ CREATE PROCEDURE AssignRoomToUser(
 )
 BEGIN
     DECLARE old_roomID INT;
+    DECLARE seats_avail INT;
 
     -- Get the current room_id for the user
     SELECT room_id INTO old_roomID
     FROM users_table
     WHERE user_id = p_userID;
 
-    -- If the user has a room assigned, update the old room's seats
-    IF old_roomID IS NOT NULL THEN
-        UPDATE rooms_table
-        SET seats_available = seats_available + 1,
-            seats_taken = seats_taken - 1
-        WHERE room_id = old_roomID;
-    END IF;
-
-    -- Decrement the seats_available and increment the seats_taken in the room_table
-    UPDATE rooms_table
-    SET seats_available = seats_available - 1,
-        seats_taken = seats_taken + 1
+    -- get the number of seats available for the new room
+    SELECT seats_available INTO seats_avail
+    FROM rooms_table
     WHERE room_id = p_roomID;
+
+    IF seats_avail > 0 THEN
+    -- If the user has a room assigned, update the old room's seats
+        IF old_roomID IS NOT NULL THEN
+            UPDATE rooms_table
+            SET seats_available = seats_available + 1,
+                seats_taken = seats_taken - 1
+            WHERE room_id = old_roomID;
+        END IF;
+
+        -- Decrement the seats_available and increment the seats_taken in the room_table
+        UPDATE rooms_table
+        SET seats_available = seats_available - 1,
+            seats_taken = seats_taken + 1
+        WHERE room_id = p_roomID;
+        
+            -- Update the users_table with the new room_id for the specified user
+        UPDATE users_table
+        SET room_id = p_roomID
+        WHERE user_id = p_userID;
+    ELSE
+		-- If the new room has no seats available, raise an error
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Room has no seats available';
+	END IF;
     
-        -- Update the users_table with the new room_id for the specified user
-    UPDATE users_table
-    SET room_id = p_roomID
-    WHERE user_id = p_userID;
 END%%
 DELIMITER ;
 
